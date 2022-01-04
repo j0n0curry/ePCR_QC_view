@@ -85,7 +85,7 @@ def main():
     
 
     # create a list of the values we want to assign for each condition
-        values = ['Negative_sample', 'PLOD', 'N_Cov_Positive_Sample', 'Control_N_Cov', 'No_Call','Control_PLOD']
+        values = ['Negative_sample', 'PLOD', 'N_Cov_Positive_Sample', 'Control_N_Cov', 'No_Call','CTRL_PLOD']
 
      # create a new column and use np.select to assign values to it using our lists as arguments
         comp['Result'] = np.select(conditions, values)
