@@ -1,3 +1,5 @@
+
+
 import streamlit as st
 import os
 from io import BytesIO
@@ -55,7 +57,7 @@ def main():
             
             
     comp = data_manager.group_df #assign variable - contactenated dataframes - csv loading direct from path doesn't require this. 
-    
+    print(comp)
     
     # start onwards with processing only if dataframe us greater than 0 
     if len(comp) > 0:
@@ -68,37 +70,44 @@ def main():
         
         #process file attributes in to parameters for QC. Essential information. 
         comp['Well'] = comp['Row_ID']+comp['Col_ID']
-        comp['norm_RNaseP'] =  comp['VIC_RFU'] / comp['ROX_RFU']
-        comp['norm_N_Cov'] =  comp["FAM_RFU"] / comp['ROX_RFU']
+        comp['norm_RNaseP'] =  comp['VIC_RFU'].abs() / comp['ROX_RFU']
+        comp['norm_N_Cov'] =  comp["FAM_RFU"]  / comp['ROX_RFU']
         comp.index.names=['order']
         comp.reset_index(inplace = True)
         comp['date_time'] = pd.to_datetime(comp['date_time'], format='%Y%m%d%H%M%S')
-        comp[['date', 'time']] = comp['date_time'].astype(str).str.split(' ', 1, expand=True)
+        #comp[['date', 'time']] = comp['date_time'].astype(str).str.split(' ', 1, expand=True)
+        print(comp.norm_RNaseP)
+        comp.to_csv('test_out.csv')
         
-        conditions = [
-            (comp['norm_N_Cov'] <= 4.0) & (comp['norm_RNaseP'] > 1.5),
-            (comp['norm_N_Cov'] > 4.0) & (comp['norm_N_Cov'] <= 10.0) & (comp['norm_RNaseP'] >0.4),
-            (comp['norm_N_Cov'] >= 10.0) & (comp['norm_RNaseP'] >=1.0),
-            (comp['norm_N_Cov'] >= 10.0) & (comp['norm_RNaseP']<= 1.0),
-            (comp['norm_N_Cov'] <= 4.0) & (comp['norm_RNaseP'] <=1.5),
-            (comp['norm_N_Cov'] > 3.0) & (comp['norm_N_Cov'] <= 10.0) & (comp['norm_RNaseP'] <0.4)]
-    
-
-    # create a list of the values we want to assign for each condition
-        values = ['Negative_sample', 'PLOD', 'N_Cov_Positive_Sample', 'Control_N_Cov', 'No_Call','CTRL_PLOD']
-
-     # create a new column and use np.select to assign values to it using our lists as arguments
-        comp['Result'] = np.select(conditions, values)
-    #comp['Result'] = comp.Result.replace('0','CTRL_PLOD')
-    #print(comp.Result.unique())
-    
         controls = {'P19': 'A1500', 'O19' : 'A1500', 'O20': 'A1500',
-                    'P21': 'NEG', 'O21': 'NEG', 'O22': 'NEG',
-                    'O23':'S06', 'P23':'S06', 'O24': 'S06'}
+                        'P21': 'NEG', 'O21': 'NEG', 'O22': 'NEG',
+                        'O23':'S06', 'P23':'S06', 'O24': 'S06'}
            
         comp['control'] = comp['Well'].map(controls).fillna('paitent')
+    def scoring(row):
+    
+        if row['norm_N_Cov'] < 3.0 and row['norm_RNaseP'] > 1.6:
+            return('Negative Patient')
+        elif row['norm_N_Cov'] > 3.0 and row['norm_N_Cov'] <= 10.0 and row['norm_RNaseP'] >1.1:
+            return('PLOD')
+        elif row['norm_N_Cov'] > 10.0 and row['norm_RNaseP'] >=1.0:
+            return('N_Cov Paitent Positive')
+        elif row['norm_N_Cov'] > 10.0 and row['norm_RNaseP']<= 1.0:
+            return('Control_N_Cov')
+        elif row['norm_N_Cov'] <= 3.0 and row['norm_RNaseP'] <=1.59:
+            return('No_Call')
+        elif row['norm_N_Cov'] > 3.0 and row['norm_N_Cov'] <= 10.0 and row['norm_RNaseP'] <1.0:
+            return'CTRL_PLOD'
+        else:
+            return('missing')
+    
+    
+    comp['Result'] = comp.apply(lambda row: scoring(row), axis = 1)   
+    
+    
         
-        st.table(comp.head())
+    print(comp.head())
+    st.table(comp.head())
     
     ####need a function here to strip out empty arrays from the data_stream - not a great idea
     #####stripping data out- function should perhaps sit in loop and check the mean of ROX - if less than 1000
@@ -512,4 +521,3 @@ class ArayaManager(WellDataManager):
 
 if __name__ == "__main__":
     main()
-
