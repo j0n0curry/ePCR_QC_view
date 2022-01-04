@@ -336,7 +336,18 @@ def main():
     
     #st.dataframe(round(ctrl_qc_table),0)
     
-    
+    @st.cache
+    def convert_df(df):
+     # IMPORTANT: Cache the conversion to prevent computation on every rerun
+        return df.to_csv().encode('utf-8')
+
+    csv = convert_df(my_large_df)
+
+    st.download_button(
+        label="Download process data as CSV",
+         data=csv,
+         file_name='araya_viewer.csv',
+         mime='text/csv')
     
     
 
