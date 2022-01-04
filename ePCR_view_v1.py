@@ -9,7 +9,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
-import pyautogui
+#import pyautogui
 
 version = 'v1.1 - alpha'
 
@@ -25,8 +25,7 @@ def main():
 
     st.subheader("Upload Araya csv file directly for processing - either drag and drop or click to select files on your local machine")
     
-    if st.button("Clear files"):
-        pyautogui.hotkey("ctrl","F5")
+
     
     
     #Button to clear cache files and reselect - clearing all files
