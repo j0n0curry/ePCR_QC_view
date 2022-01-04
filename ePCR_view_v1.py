@@ -341,7 +341,7 @@ def main():
      # IMPORTANT: Cache the conversion to prevent computation on every rerun
         return df.to_csv().encode('utf-8')
 
-    csv = convert_df(my_large_df)
+    csv = convert_df(comp)
 
     st.download_button(
         label="Download process data as CSV",
