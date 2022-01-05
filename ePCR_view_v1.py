@@ -83,6 +83,19 @@ def main():
                         'O23':'S06', 'P23':'S06', 'O24': 'S06'}
            
         comp['control'] = comp['Well'].map(controls).fillna('paitent')
+        
+        
+    def valid_array(df):
+        vdf = df.groupby('Run_ID')['ROX_RFU'].mean().reset_index()
+        vdf = vdf[vdf['ROX_RFU'] <= 1000] 
+        vdf =  vdf['Run_ID'].to_list()
+        df = df[~df.Run_ID.isin(vdf)]
+        st.write('Arrays Exluded', str(vdf))
+        return(df)    
+        
+    comp=valid_array(comp) 
+    
+    
     def scoring(row):
     
         if row['norm_N_Cov'] < 3.0 and row['norm_RNaseP'] > 1.6:
