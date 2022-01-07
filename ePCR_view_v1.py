@@ -377,11 +377,19 @@ def main():
     
     testneg = comp[(comp.control == 'NEG')]
     
+    st.subheader('Accuplex nFAM')
+    
     ctrl_view(testac, 13.8, 12.8, 14.8)
     
+    st.subheader('Qnostics nFAM')
+    
     ctrl_view(testso, 12.9, 11.7, 14.1)
+    
+    st.subheader('Accuplex FAM RFU')
      
     ctrl_sig(testac, 'FAM_RFU', 37250, 21038, 53462) 
+    
+    st.subheader('Qnostics FAM RFU')
     
     ctrl_sig(testso, 'FAM_RFU', 35629, 24286, 46972)
     
