@@ -279,13 +279,13 @@ def main():
     
     #print(ctrl_qc_table)   
     
-    def ctrl_view(testdf):
+    def ctrl_view(testdf, m, l , u):
         
         figdt = px.scatter(testdf, x='date_time', y='norm_N_Cov', color = 'Result')
         figdt.update_yaxes(range=[0, 20])
         figdt.update_traces(marker_size=3)
         figdt.add_trace(go.Scatter(
-            y=[12.5, 12.5],
+            y=[m, m],
             x=[testdf.date_time.min(), testdf.date_time.max()],
             mode="lines+markers+text",
             name="Val mean",
@@ -293,7 +293,7 @@ def main():
             textposition="top center",
             line=dict(color="red", dash = 'dash')))
         figdt.add_trace(go.Scatter(
-            y=[10.2, 10.2],
+            y=[l, l],
             x=[testdf.date_time.min(), testdf.date_time.max()],
             mode="lines+markers+text",
             name="3SD low",
@@ -301,7 +301,43 @@ def main():
             textposition="top center",
             line=dict(color="yellow", dash = 'dash')))
         figdt.add_trace(go.Scatter(
-            y=[15.2, 15.2],
+            y=[u, u],
+            x=[testdf.date_time.min(), testdf.date_time.max()],
+            mode="lines+markers+text",
+            name="3SD high",
+            text=["+3SD"],
+            textposition="top center",
+            line=dict(color="yellow", dash = 'dash')))
+        st.plotly_chart(figdt, use_container_width=True)
+        
+     def ctrl_sig(testdf, sig, m, l , u):
+        
+        if sig == 'FAM_RFU':
+            range = [0,20]
+        elif sig = 'VIC_RFU':
+            range == [0,6]
+        
+        figdt = px.scatter(testdf, x='date_time', y= sig, color = 'Result')
+        figdt.update_yaxes(range=range)
+        figdt.update_traces(marker_size=3)
+        figdt.add_trace(go.Scatter(
+            y=[m, m],
+            x=[testdf.date_time.min(), testdf.date_time.max()],
+            mode="lines+markers+text",
+            name="Val mean",
+            text=["Mean"],
+            textposition="top center",
+            line=dict(color="red", dash = 'dash')))
+        figdt.add_trace(go.Scatter(
+            y=[l, l],
+            x=[testdf.date_time.min(), testdf.date_time.max()],
+            mode="lines+markers+text",
+            name="3SD low",
+            text=["-3SD"],
+            textposition="top center",
+            line=dict(color="yellow", dash = 'dash')))
+        figdt.add_trace(go.Scatter(
+            y=[u, u],
             x=[testdf.date_time.min(), testdf.date_time.max()],
             mode="lines+markers+text",
             name="3SD high",
@@ -336,17 +372,27 @@ def main():
         cluster(comp)
         
     
-    st.subheader('Accuplex Control View - QC control data')
+    st.subheader('QC control data - mean and 3 +/- SD markers - taken from week 27 2021 post validation')
     
-   
+  
+    testac = comp[(comp.control == 'A1500')]
+    
+    testso = comp[(comp.control == 'SO6')]
+    
+    testneg = comp[(comp.control == 'NEG')]
+    
+    ctrl_view(testdf, 12.5, 11.1, 15.6)
+    
+    ctrl_view(testso, 11.5, 10.1, 13.4)
+    
+    ctrl_view(testneg, 1.2, 1, 1.4)
+    
+    ctrl_sig(testdf, 'FAM_RFU', 37250, 21038, 53462) 
+    
+    ctrl_sig(testso, 'FAM_RFU', 35629, 24286, 46972)
+    
+    ctrl_sig(testso, 'VIC_RFU', 35629, 24286, 46972)
 
-
-   
-    testdf = comp[(comp.control == 'A1500')]
-    
-    ctrl_view(testdf)
-    
-    #st.dataframe(round(ctrl_qc_table),0)
     
     @st.cache
     def convert_df(df):
@@ -360,7 +406,82 @@ def main():
          data=csv,
          file_name='araya_viewer.csv',
          mime='text/csv')
+    FAM_data = stats_FAM(comp)
+    CFO_data = stats_CFO(comp)
+    nFAM_data = stats_nFAM(comp)
+    nCFO_data = stats_nCFO(comp)
+    stats_ROX = ROXCV(comp)
     
+    st.dataframe(stats_ROX)
+    st.dataframe(FAM_data.astype(str))
+    st.dataframe(CFO_data.astype(str))
+    st.dataframe(nFAM_data.astype(str))
+    st.dataframe(nCFO_data.astype(str))
+   
+    
+    @st.cache
+    def convert_df(df):
+     # IMPORTANT: Cache the conversion to prevent computation on every rerun
+        return df.to_csv().encode('utf-8')
+
+    all_data = convert_df(comp)
+    
+    CFO = convert_df(CFO_data)
+         
+    nFAM = convert_df(nFAM_data)
+    
+    nCFO = convert_df(nCFO_data)
+    
+    ROX = convert_df(stats_ROX)
+    
+    FAM = convert_df(FAM_data)
+    
+
+    st.download_button(
+        label="Download all data as CSV",
+         data=all_data,
+         file_name='araya_all_data_ox.csv',
+         mime='text/csv')
+         
+    
+
+    st.download_button(
+        label="Download FAM CSV",
+         data=FAM,
+         file_name='araya_ox_FAM_out.csv',
+         mime='text/csv')
+    
+    
+
+    st.download_button(
+        label="Download CFO CSV",
+         data=CFO,
+         file_name='araya_ox_CFO_out.csv',
+         mime='text/csv')
+    
+    
+    
+    st.download_button(
+        label="Download nFAM CSV",
+         data=nFAM,
+         file_name='araya_ox_nFAM_out.csv',
+         mime='text/csv')
+    
+    
+
+    st.download_button(
+        label="Download nCFO CSV",
+         data=nCFO,
+         file_name='araya_ox_nCFO_out.csv',
+         mime='text/csv')
+    
+    
+    
+    st.download_button(
+        label="Download ROX CSV",
+         data=ROX,
+         file_name='araya_ox_ROX_out.csv',
+         mime='text/csv')
     
 
 ###function parser - parse araya files - instatiated with ArayaManager - functions can be accessed with . notation
