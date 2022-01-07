@@ -314,9 +314,9 @@ def main():
     def ctrl_sig(testdf, sig, m, l , u):
         
         if sig == 'FAM_RFU':
-            range = [0,20]
+            range = [0,50000]
         elif sig == 'VIC_RFU':
-            range = [0,6]
+            range = [0,15000]
         
         figdt = px.scatter(testdf, x='date_time', y= sig, color = 'Result')
         figdt.update_yaxes(range=range)
@@ -378,7 +378,7 @@ def main():
   
     testac = comp[(comp.control == 'A1500')]
     
-    testso = comp[(comp.control == 'SO6')]
+    testso = comp[(comp.control == 'S06')]
     
     testneg = comp[(comp.control == 'NEG')]
     
@@ -390,9 +390,7 @@ def main():
     
     ctrl_sig(testso, 'FAM_RFU', 35629, 24286, 46972)
     
-    ctrl_sig(testneg, 'VIC_RFU', 35629, 24286, 46972)
-
-    
+      
     @st.cache
     def convert_df(df):
      # IMPORTANT: Cache the conversion to prevent computation on every rerun
