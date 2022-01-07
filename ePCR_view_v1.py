@@ -274,11 +274,6 @@ def main():
     
     
     
-    #ctrl_qc_table = testdf.groupby(['date_time','Result'])['norm_N_Cov','FAM_RFU', 'ROX].agg('mean', 'std')
-    #ctrl_qc_table = testdf.groupby(['date_time','Result'])['norm_N_Cov','FAM_RFU', 'ROX].agg('mean', 'std')
-    
-    #print(ctrl_qc_table)   
-    
     def ctrl_view(testdf, m, l , u):
         
         figdt = px.scatter(testdf, x='date_time', y='norm_N_Cov', color = 'Result')
@@ -382,9 +377,9 @@ def main():
     
     testneg = comp[(comp.control == 'NEG')]
     
-    ctrl_view(testac, 13.8, 10.8, 15.6)
+    ctrl_view(testac, 13.8, 12.8, 14.8)
     
-    ctrl_view(testso, 12.1, 10.9, 13.4)
+    ctrl_view(testso, 12.9, 11.7, 14.1)
      
     ctrl_sig(testac, 'FAM_RFU', 37250, 21038, 53462) 
     
