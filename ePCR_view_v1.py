@@ -309,7 +309,7 @@ def main():
     def ctrl_sig(testdf, sig, m, l , u):
         
         if sig == 'FAM_RFU':
-            range = [0,53000]
+            range = [0,60000]
         elif sig == 'VIC_RFU':
             range = [0,18000]
         
