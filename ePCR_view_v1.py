@@ -310,7 +310,8 @@ def main():
             line=dict(color="yellow", dash = 'dash')))
         st.plotly_chart(figdt, use_container_width=True)
         
-     def ctrl_sig(testdf, sig, m, l , u):
+     
+    def ctrl_sig(testdf, sig, m, l , u):
         
         if sig == 'FAM_RFU':
             range = [0,20]
