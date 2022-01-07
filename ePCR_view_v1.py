@@ -315,8 +315,8 @@ def main():
         
         if sig == 'FAM_RFU':
             range = [0,20]
-        elif sig = 'VIC_RFU':
-            range == [0,6]
+        elif sig == 'VIC_RFU':
+            range = [0,6]
         
         figdt = px.scatter(testdf, x='date_time', y= sig, color = 'Result')
         figdt.update_yaxes(range=range)
