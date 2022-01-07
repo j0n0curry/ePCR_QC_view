@@ -420,7 +420,7 @@ def main():
     def stats_FAM(df):
         
         df['FAM_RFU'] = df['FAM_RFU'].abs()
-        stats_FAM = df.groupby(['Run_ID','quad', 'Result'])['FAM_RFU'].agg(['count', 'mean','min', 'std', 'max'])
+        stats_FAM = df.groupby(['Run_ID', 'Result'])['FAM_RFU'].agg(['count', 'mean','min', 'std', 'max']).fillna('-')
         
   
         
@@ -444,7 +444,7 @@ def main():
     def stats_nFAM(df):
         
         df['norm_N_Cov'] = df['norm_N_Cov'].abs()
-        stats_nFAM = df.groupby(['Run_ID','quad', 'Result'])['norm_N_Cov'].agg(['count', 'mean','min', 'std', 'max']).fillna('-')
+        stats_nFAM = df.groupby(['Run_ID', 'Result'])['norm_N_Cov'].agg(['count', 'mean','min', 'std', 'max']).fillna('-')
         
   
         
@@ -469,7 +469,7 @@ def main():
     def stats_CFO(df):
         
         df['VIC_RFU'] = df['VIC_RFU'].abs()
-        stats_CFO = df.groupby(['Run_ID', 'quad', 'Result'])['VIC_RFU'].agg(['count', 'mean','min', 'std', 'max']).fillna('-')
+        stats_CFO = df.groupby(['Run_ID', 'Result'])['VIC_RFU'].agg(['count', 'mean','min', 'std', 'max']).fillna('-')
         
   
         
@@ -493,7 +493,7 @@ def main():
     def stats_nCFO(df):
         
         df['norm_RNAseP'] = df['norm_RNaseP'].abs()
-        stats_nCFO = df.groupby(['Run_ID', 'quad', 'Result'])['norm_RNaseP'].agg(['count', 'mean','min', 'std', 'max']).fillna('-')
+        stats_nCFO = df.groupby(['Run_ID', 'Result'])['norm_RNaseP'].agg(['count', 'mean','min', 'std', 'max']).fillna('-')
         
   
         
