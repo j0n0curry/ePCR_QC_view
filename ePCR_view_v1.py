@@ -385,6 +385,136 @@ def main():
     
     ctrl_sig(testso, 'FAM_RFU', 35629, 24286, 46972)
     
+    
+    #percentiles
+    def Q25(x):
+        return x.quantile(0.25)
+
+    def Q50(x):
+        return x.quantile(0.5)
+
+    def Q75(x):
+        return x.quantile(0.75)
+    
+    def ROXCV(df1):
+        stats_ROX = df1.groupby(['Run_ID'])['ROX_RFU'].agg(['count', 'mean','std','min',Q25, Q50, Q75, 'max'])
+   
+        CI95_hi_ROX = []
+        CI95_lo_ROX = []
+        CV_run_ROX = []
+        for i in stats_ROX.index:
+            c,m,s,t,u,q1,q2,v =(stats_ROX.loc[i])
+            CI95_hi_ROX.append(m + 1.95*s/math.sqrt(c))
+            CI95_lo_ROX.append(m - 1.95*s/math.sqrt(c))
+            CV_run_ROX.append(s/m*100)
+        
+        stats_ROX['CI95% low ROX'] = CI95_lo_ROX
+        stats_ROX['CI95% hi ROX'] = CI95_hi_ROX
+        stats_ROX['ROX CV%'] = CV_run_ROX
+        stats_ROX = stats_ROX.reset_index()
+        return(stats_ROX)
+
+    stats_ROX = ROXCV(comp)
+  
+    
+    def stats_FAM(df):
+        
+        df['FAM_RFU'] = df['FAM_RFU'].abs()
+        stats_FAM = df.groupby(['Run_ID','quad', 'Result'])['FAM_RFU'].agg(['count', 'mean','min', 'std', 'max'])
+        
+  
+        
+        CI95_hi_FAM = []
+        CI95_lo_FAM = []
+        CV_run_FAM = []
+  
+
+        for i in stats_FAM.index:
+            c,m,s,t,v =(stats_FAM.loc[i])
+            CI95_hi_FAM.append(m + 1.96*s/math.sqrt(c))
+            CI95_lo_FAM.append(m - 1.96*s/math.sqrt(c))
+            CV_run_FAM.append(100 - (s/m*100))
+    
+        stats_FAM['CI 95% low FAM'] = CI95_lo_FAM
+        stats_FAM['CI 95_hi_FAM'] = CI95_hi_FAM
+        stats_FAM['CV%_FAM'] = CV_run_FAM
+        #stats_nFAM['%Percent_detected'] = result['N1N2_detected'] / TOT*100
+        return(stats_FAM)
+    
+    def stats_nFAM(df):
+        
+        df['norm_N_Cov'] = df['norm_N_Cov'].abs()
+        stats_nFAM = df.groupby(['Run_ID','quad', 'Result'])['norm_N_Cov'].agg(['count', 'mean','min', 'std', 'max']).fillna('-')
+        
+  
+        
+        CI95_hi_nFAM = []
+        CI95_lo_nFAM = []
+        CV_run_nFAM = []
+  
+
+        for i in stats_nFAM.index:
+            c,m,s,t,v =(stats_nFAM.loc[i])
+            CI95_hi_nFAM.append(m + 1.96*s/math.sqrt(c))
+            CI95_lo_nFAM.append(m - 1.96*s/math.sqrt(c))
+            CV_run_nFAM.append(100 - (s/m*100))
+    
+        stats_nFAM['CI 95% low nFAM'] = CI95_lo_nFAM
+        stats_nFAM['CI 95_hi_nFAM'] = CI95_hi_nFAM
+        stats_nFAM['CV%_nFAM'] = CV_run_nFAM
+        #stats_nFAM['%Percent_detected'] = result['N1N2_detected'] / TOT*100
+        return(stats_nFAM)
+    
+    
+    def stats_CFO(df):
+        
+        df['VIC_RFU'] = df['VIC_RFU'].abs()
+        stats_CFO = df.groupby(['Run_ID', 'quad', 'Result'])['VIC_RFU'].agg(['count', 'mean','min', 'std', 'max']).fillna('-')
+        
+  
+        
+        CI95_hi_CFO = []
+        CI95_lo_CFO = []
+        CV_run_CFO = []
+  
+
+        for i in stats_CFO.index:
+            c,m,s,t,v =(stats_CFO.loc[i])
+            CI95_hi_CFO.append(m + 1.96*s/math.sqrt(c))
+            CI95_lo_CFO.append(m - 1.96*s/math.sqrt(c))
+            CV_run_CFO.append(100 - (s/m*100))
+    
+        stats_CFO['CI 95% low CFO'] = CI95_lo_CFO
+        stats_CFO['CI 95_hi_CFO'] = CI95_hi_CFO
+        stats_CFO['CV%_CFO'] = CV_run_CFO
+        
+        return(stats_CFO)
+        
+    def stats_nCFO(df):
+        
+        df['norm_RNAseP'] = df['norm_RNaseP'].abs()
+        stats_nCFO = df.groupby(['Run_ID', 'quad', 'Result'])['norm_RNaseP'].agg(['count', 'mean','min', 'std', 'max']).fillna('-')
+        
+  
+        
+        CI95_hi_nCFO = []
+        CI95_lo_nCFO = []
+        CV_run_nCFO = []
+  
+
+        for i in stats_nCFO.index:
+            c,m,s,t,v =(stats_nCFO.loc[i])
+            CI95_hi_nCFO.append(m + 1.96*s/math.sqrt(c))
+            CI95_lo_nCFO.append(m - 1.96*s/math.sqrt(c))
+            CV_run_nCFO.append(100 - (s/m*100))
+    
+        stats_nCFO['CI 95% low nCFO'] = CI95_lo_nCFO
+        stats_nCFO['CI 95_hi_nCFO'] = CI95_hi_nCFO
+        stats_nCFO['CV%_nCFO'] = CV_run_nCFO
+        #stats_nFAM['%Percent_detected'] = result['N1N2_detected'] / TOT*100
+        return(stats_nCFO)
+    
+    
       
     @st.cache
     def convert_df(df):
