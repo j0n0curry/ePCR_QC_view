@@ -382,17 +382,17 @@ def main():
     
     testneg = comp[(comp.control == 'NEG')]
     
-    ctrl_view(testdf, 12.5, 11.1, 15.6)
+    ctrl_view(testac, 12.5, 11.1, 15.6)
     
     ctrl_view(testso, 11.5, 10.1, 13.4)
     
     ctrl_view(testneg, 1.2, 1, 1.4)
     
-    ctrl_sig(testdf, 'FAM_RFU', 37250, 21038, 53462) 
+    ctrl_sig(testac, 'FAM_RFU', 37250, 21038, 53462) 
     
     ctrl_sig(testso, 'FAM_RFU', 35629, 24286, 46972)
     
-    ctrl_sig(testso, 'VIC_RFU', 35629, 24286, 46972)
+    ctrl_sig(testneg, 'VIC_RFU', 35629, 24286, 46972)
 
     
     @st.cache
