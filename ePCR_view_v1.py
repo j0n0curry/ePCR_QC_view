@@ -533,11 +533,15 @@ def main():
     nFAM_data = stats_nFAM(comp)
     nCFO_data = stats_nCFO(comp)
     stats_ROX = ROXCV(comp)
-    
+    st.subheader('ROX run stats')
     st.dataframe(stats_ROX)
+    st.subheader('FAM run stats')
     st.dataframe(FAM_data.astype(str))
+    st.subheader('CFO run stats')
     st.dataframe(CFO_data.astype(str))
+    st.subheader('nFAM run stats')
     st.dataframe(nFAM_data.astype(str))
+    st.subheader('nCFO run stats')
     st.dataframe(nCFO_data.astype(str))
    
     
@@ -559,7 +563,7 @@ def main():
     FAM = convert_df(FAM_data)
     
 
-    st.download_button(
+    st.sidebar.download_button(
         label="Download all data as CSV",
          data=all_data,
          file_name='araya_all_data_ox.csv',
@@ -567,7 +571,7 @@ def main():
          
     
 
-    st.download_button(
+    st.sidebar.download_button(
         label="Download FAM CSV",
          data=FAM,
          file_name='araya_ox_FAM_out.csv',
@@ -575,7 +579,7 @@ def main():
     
     
 
-    st.download_button(
+    st.sidebar.download_button(
         label="Download CFO CSV",
          data=CFO,
          file_name='araya_ox_CFO_out.csv',
@@ -583,7 +587,7 @@ def main():
     
     
     
-    st.download_button(
+    st.sidebar.download_button(
         label="Download nFAM CSV",
          data=nFAM,
          file_name='araya_ox_nFAM_out.csv',
@@ -591,7 +595,7 @@ def main():
     
     
 
-    st.download_button(
+    st.sidebar.download_button(
         label="Download nCFO CSV",
          data=nCFO,
          file_name='araya_ox_nCFO_out.csv',
@@ -599,7 +603,7 @@ def main():
     
     
     
-    st.download_button(
+    st.sidebar.download_button(
         label="Download ROX CSV",
          data=ROX,
          file_name='araya_ox_ROX_out.csv',
