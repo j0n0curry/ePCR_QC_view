@@ -309,9 +309,9 @@ def main():
     def ctrl_sig(testdf, sig, m, l , u):
         
         if sig == 'FAM_RFU':
-            range = [0,50000]
+            range = [0,53000]
         elif sig == 'VIC_RFU':
-            range = [0,15000]
+            range = [0,18000]
         
         figdt = px.scatter(testdf, x='date_time', y= sig, color = 'Result')
         figdt.update_yaxes(range=range)
