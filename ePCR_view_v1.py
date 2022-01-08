@@ -21,7 +21,7 @@ def main():
     #Main landing page greating / info
     st.set_page_config(layout="wide")
 
-    st.title('ePCR analysis tool ' +str(version) + 'deveoped jonathan.curry@lgcgroup.com - for bugs - please email files that cause problems for debugging') )
+    st.title('ePCR analysis tool ' +str(version) + 'deveoped jonathan.curry@lgcgroup.com - for bugs - please email files that cause problems for debugging purposes')
 
     st.subheader("Upload Araya csv file directly for processing - either drag and drop or click to select files on your local machine")
     
