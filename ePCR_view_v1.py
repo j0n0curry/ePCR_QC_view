@@ -425,12 +425,11 @@ def main():
         return(stats_ROX)
 
     stats_ROX = ROXCV(comp)
-  
     
     def stats_FAM(df):
         
-        df['FAM_RFU'] = df['FAM_RFU'].abs()
-        stats_FAM = df.groupby(['Run_ID', 'Result'])['FAM_RFU'].agg(['count', 'mean','min', 'std', 'max']).fillna('-')
+   
+        stats_FAM = df.groupby(['Run_ID', 'Result'])['FAM_RFU'].agg(['count', 'mean','std', 'min', 'max']).astype(float)
         
   
         
@@ -443,18 +442,19 @@ def main():
             c,m,s,t,v =(stats_FAM.loc[i])
             CI95_hi_FAM.append(m + 1.96*s/math.sqrt(c))
             CI95_lo_FAM.append(m - 1.96*s/math.sqrt(c))
-            CV_run_FAM.append(100 - (s/m*100))
+            CV_run_FAM.append(s/m*100)
     
         stats_FAM['CI 95% low FAM'] = CI95_lo_FAM
         stats_FAM['CI 95_hi_FAM'] = CI95_hi_FAM
         stats_FAM['CV%_FAM'] = CV_run_FAM
         #stats_nFAM['%Percent_detected'] = result['N1N2_detected'] / TOT*100
-        return(stats_FAM)
+        return(stats_FAM.fillna('-'))
+  
     
     def stats_nFAM(df):
         
-        df['norm_N_Cov'] = df['norm_N_Cov'].abs()
-        stats_nFAM = df.groupby(['Run_ID', 'Result'])['norm_N_Cov'].agg(['count', 'mean','min', 'std', 'max']).fillna('-')
+        
+        stats_nFAM = df.groupby(['Run_ID', 'Result'])['norm_N_Cov'].agg(['count', 'mean','std', 'min', 'max']).astype(float)
         
   
         
@@ -473,13 +473,13 @@ def main():
         stats_nFAM['CI 95_hi_nFAM'] = CI95_hi_nFAM
         stats_nFAM['CV%_nFAM'] = CV_run_nFAM
         #stats_nFAM['%Percent_detected'] = result['N1N2_detected'] / TOT*100
-        return(stats_nFAM)
+        return(stats_nFAM.fillna('-'))
     
     
     def stats_CFO(df):
         
-        df['VIC_RFU'] = df['VIC_RFU'].abs()
-        stats_CFO = df.groupby(['Run_ID', 'Result'])['VIC_RFU'].agg(['count', 'mean','min', 'std', 'max']).fillna('-')
+      
+        stats_CFO = df.groupby(['Run_ID', 'Result'])['VIC_RFU'].agg(['count', 'mean','min', 'std', 'max']).astype(float)
         
   
         
@@ -498,12 +498,12 @@ def main():
         stats_CFO['CI 95_hi_CFO'] = CI95_hi_CFO
         stats_CFO['CV%_CFO'] = CV_run_CFO
         
-        return(stats_CFO)
+        return(stats_CFO.fillna('-'))
         
     def stats_nCFO(df):
         
-        df['norm_RNAseP'] = df['norm_RNaseP'].abs()
-        stats_nCFO = df.groupby(['Run_ID', 'Result'])['norm_RNaseP'].agg(['count', 'mean','min', 'std', 'max']).fillna('-')
+       
+        stats_nCFO = df.groupby(['Run_ID', 'Result'])['norm_RNaseP'].agg(['count', 'mean','std', 'min', 'max']).astype(float)
         
   
         
@@ -522,7 +522,7 @@ def main():
         stats_nCFO['CI 95_hi_nCFO'] = CI95_hi_nCFO
         stats_nCFO['CV%_nCFO'] = CV_run_nCFO
         #stats_nFAM['%Percent_detected'] = result['N1N2_detected'] / TOT*100
-        return(stats_nCFO)
+        return(stats_nCFO.fillna('-'))
     
     
       
