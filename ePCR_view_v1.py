@@ -76,8 +76,7 @@ def main():
         comp.index.names=['order']
         comp.reset_index(inplace = True)
         comp['date_time'] = pd.to_datetime(comp['date_time'], format='%Y%m%d%H%M%S')
-        #comp[['date', 'time']] = comp['date_time'].astype(str).str.split(' ', 1, expand=True)
-        print(comp.norm_RNaseP)
+        comp[['date', 'time']] = comp['date_time'].astype(str).str.split(' ', 1, expand=True)
         comp.to_csv('test_out.csv')
         
         controls = {'P19': 'A1500', 'O19' : 'A1500', 'O20': 'A1500',
@@ -429,7 +428,7 @@ def main():
     def stats_FAM(df):
         
    
-        stats_FAM = df.groupby(['Run_ID', 'Result'])['FAM_RFU'].agg(['count', 'mean','std', 'min', 'max']).astype(float)
+        stats_FAM = df.groupby(['date', 'Result'])['FAM_RFU'].agg(['count', 'mean','std', 'min', 'max']).astype(float)
         
   
         
@@ -454,7 +453,7 @@ def main():
     def stats_nFAM(df):
         
         
-        stats_nFAM = df.groupby(['Run_ID', 'Result'])['norm_N_Cov'].agg(['count', 'mean','std', 'min', 'max']).astype(float)
+        stats_nFAM = df.groupby(['date', 'Result'])['norm_N_Cov'].agg(['count', 'mean','std', 'min', 'max']).astype(float)
         
   
         
@@ -478,8 +477,8 @@ def main():
     
     def stats_CFO(df):
         
-      
-        stats_CFO = df.groupby(['Run_ID', 'Result'])['VIC_RFU'].agg(['count', 'mean','min', 'std', 'max']).astype(float)
+       
+        stats_CFO = df.groupby(['date', 'Result'])['VIC_RFU'].agg(['count', 'mean','min', 'std', 'max']).astype(float)
         
   
         
@@ -503,7 +502,7 @@ def main():
     def stats_nCFO(df):
         
        
-        stats_nCFO = df.groupby(['Run_ID', 'Result'])['norm_RNaseP'].agg(['count', 'mean','std', 'min', 'max']).astype(float)
+        stats_nCFO = df.groupby(['date', 'Result'])['norm_RNaseP'].agg(['count', 'mean','std', 'min', 'max']).astype(float)
         
   
         
