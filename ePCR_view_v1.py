@@ -491,7 +491,7 @@ def main():
             c,m,s,t,v =(stats_CFO.loc[i])
             CI95_hi_CFO.append(m + 1.96*s/math.sqrt(c))
             CI95_lo_CFO.append(m - 1.96*s/math.sqrt(c))
-            CV_run_CFO.append(100 - (s/m*100))
+            CV_run_CFO.append(s/m*100)
     
         stats_CFO['CI 95% low CFO'] = CI95_lo_CFO
         stats_CFO['CI 95_hi_CFO'] = CI95_hi_CFO
@@ -515,8 +515,8 @@ def main():
             c,m,s,t,v =(stats_nCFO.loc[i])
             CI95_hi_nCFO.append(m + 1.96*s/math.sqrt(c))
             CI95_lo_nCFO.append(m - 1.96*s/math.sqrt(c))
-            CV_run_nCFO.append(100 - (s/m*100))
-    
+            CV_run_nCFO.append(s/m*100)
+            
         stats_nCFO['CI 95% low nCFO'] = CI95_lo_nCFO
         stats_nCFO['CI 95_hi_nCFO'] = CI95_hi_nCFO
         stats_nCFO['CV%_nCFO'] = CV_run_nCFO
