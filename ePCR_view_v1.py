@@ -1,5 +1,3 @@
-
-
 import streamlit as st
 import os
 from io import BytesIO
@@ -83,8 +81,10 @@ def main():
                         'P21': 'NEG', 'O21': 'NEG', 'O22': 'NEG',
                         'O23':'S06', 'P23':'S06', 'O24': 'S06'}
            
-        comp['control'] = comp['Well'].map(controls).fillna('paitent')
-        
+        comp['control'] = comp['Well'].map(controls).fillna('patient')
+    else:
+        st.warning('Please upload Araya files')
+        st.stop()
         
     def valid_array(df):
         vdf = df.groupby('Run_ID')['ROX_RFU'].mean().reset_index()
@@ -94,7 +94,7 @@ def main():
         st.write('Arrays Exluded', str(vdf))
         return(df)    
         
-    comp=valid_array(comp) 
+     
     
     
     def scoring(row):
@@ -104,7 +104,7 @@ def main():
         elif row['norm_N_Cov'] > 3.0 and row['norm_N_Cov'] <= 10.0 and row['norm_RNaseP'] >1.1:
             return('PLOD')
         elif row['norm_N_Cov'] > 10.0 and row['norm_RNaseP'] >=1.0:
-            return('N_Cov Paitent Positive')
+            return('N_Cov Patient Positive')
         elif row['norm_N_Cov'] > 10.0 and row['norm_RNaseP']<= 1.0:
             return('Control_N_Cov')
         elif row['norm_N_Cov'] <= 3.0 and row['norm_RNaseP'] <=1.59:
@@ -114,9 +114,22 @@ def main():
         else:
             return('missing')
     
+    def void_detect_neg(row):
+        if row['norm_N_Cov'] > 10.0:
+            return('Detected')
+        elif row['norm_N_Cov'] > 4.0 and row['norm_N_Cov'] <= 10.0:
+            return('PLOD')
+        else:
+            return('negative')
+    
+         
+    
     
     comp['Result'] = comp.apply(lambda row: scoring(row), axis = 1)   
+    comp['Detection'] = comp.apply(lambda row: void_detect_neg(row), axis = 1) 
     
+    detect = comp.groupby(['Run_ID', 'Detection'])['Detection'].count()
+    detect = detect.transpose()
     
         
     print(comp.head())
@@ -394,6 +407,8 @@ def main():
     
     ctrl_sig(testso, 'FAM_RFU', 35629, 24286, 46972)
     
+     
+    
     
     #percentiles
     def Q25(x):
@@ -428,7 +443,7 @@ def main():
     def stats_FAM(df):
         
    
-        stats_FAM = df.groupby(['date', 'Result'])['FAM_RFU'].agg(['count', 'mean','std', 'min', 'max']).astype(float)
+        stats_FAM = df.groupby(['Run_ID', 'Result'])['FAM_RFU'].agg(['count', 'mean','std', 'min', 'max']).astype(float)
         
   
         
@@ -453,7 +468,7 @@ def main():
     def stats_nFAM(df):
         
         
-        stats_nFAM = df.groupby(['date', 'Result'])['norm_N_Cov'].agg(['count', 'mean','std', 'min', 'max']).astype(float)
+        stats_nFAM = df.groupby(['Run_ID', 'Result'])['norm_N_Cov'].agg(['count', 'mean','std', 'min', 'max']).astype(float)
         
   
         
@@ -478,7 +493,7 @@ def main():
     def stats_CFO(df):
         
        
-        stats_CFO = df.groupby(['date', 'Result'])['VIC_RFU'].agg(['count', 'mean','min', 'std', 'max']).astype(float)
+        stats_CFO = df.groupby(['Run_ID', 'Result'])['VIC_RFU'].agg(['count', 'mean','min', 'std', 'max']).astype(float)
         
   
         
@@ -502,7 +517,7 @@ def main():
     def stats_nCFO(df):
         
        
-        stats_nCFO = df.groupby(['date', 'Result'])['norm_RNaseP'].agg(['count', 'mean','std', 'min', 'max']).astype(float)
+        stats_nCFO = df.groupby(['Run_ID', 'Result'])['norm_RNaseP'].agg(['count', 'mean','std', 'min', 'max']).astype(float)
         
   
         
@@ -523,7 +538,7 @@ def main():
         #stats_nFAM['%Percent_detected'] = result['N1N2_detected'] / TOT*100
         return(stats_nCFO.fillna('-'))
     
-    
+   
       
     @st.cache
     def convert_df(df):
@@ -531,6 +546,8 @@ def main():
         return df.to_csv().encode('utf-8')
 
     csv = convert_df(comp)
+    
+    
 
     st.download_button(
         label="Download process data as CSV",
@@ -552,13 +569,9 @@ def main():
     st.dataframe(nFAM_data.astype(str))
     st.subheader('nCFO run stats')
     st.dataframe(nCFO_data.astype(str))
-   
     
-    @st.cache
-    def convert_df(df):
-     # IMPORTANT: Cache the conversion to prevent computation on every rerun
-        return df.to_csv().encode('utf-8')
-
+    st.dataframe(detect)
+ 
     all_data = convert_df(comp)
     
     CFO = convert_df(CFO_data)
@@ -571,11 +584,13 @@ def main():
     
     FAM = convert_df(FAM_data)
     
+    det = convert_df(detect)
+    
 
     st.sidebar.download_button(
         label="Download all data as CSV",
          data=all_data,
-         file_name='araya_all_data_ox.csv',
+         file_name='araya_all_data.csv',
          mime='text/csv')
          
     
@@ -583,7 +598,7 @@ def main():
     st.sidebar.download_button(
         label="Download FAM CSV",
          data=FAM,
-         file_name='araya_ox_FAM_out.csv',
+         file_name='araya_FAM_out.csv',
          mime='text/csv')
     
     
@@ -599,7 +614,7 @@ def main():
     st.sidebar.download_button(
         label="Download nFAM CSV",
          data=nFAM,
-         file_name='araya_ox_nFAM_out.csv',
+         file_name='araya_nFAM_out.csv',
          mime='text/csv')
     
     
@@ -607,7 +622,7 @@ def main():
     st.sidebar.download_button(
         label="Download nCFO CSV",
          data=nCFO,
-         file_name='araya_ox_nCFO_out.csv',
+         file_name='araya_nCFO_out.csv',
          mime='text/csv')
     
     
@@ -615,8 +630,15 @@ def main():
     st.sidebar.download_button(
         label="Download ROX CSV",
          data=ROX,
-         file_name='araya_ox_ROX_out.csv',
+         file_name='araya_ROX_out.csv',
          mime='text/csv')
+    
+    st.sidebar.download_button(
+        label="Download detected CSV",
+         data=det,
+         file_name='araya_detected_out.csv',
+         mime='text/csv')
+    
     
 
 ###function parser - parse araya files - instatiated with ArayaManager - functions can be accessed with . notation
