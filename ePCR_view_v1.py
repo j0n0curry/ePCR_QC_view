@@ -101,23 +101,23 @@ def main():
     
         if row['norm_N_Cov'] < 3.0 and row['norm_RNaseP'] > 1.6:
             return('Negative Patient')
-        elif row['norm_N_Cov'] > 3.0 and row['norm_N_Cov'] <= 10.0 and row['norm_RNaseP'] >1.1:
+        elif row['norm_N_Cov'] > 3.0 and row['norm_N_Cov'] <= 9.0 and row['norm_RNaseP'] >1.1:
             return('PLOD')
-        elif row['norm_N_Cov'] > 10.0 and row['norm_RNaseP'] >=1.0:
+        elif row['norm_N_Cov'] > 9.0 and row['norm_RNaseP'] >=1.0:
             return('N_Cov Patient Positive')
-        elif row['norm_N_Cov'] > 10.0 and row['norm_RNaseP']<= 1.0:
+        elif row['norm_N_Cov'] > 9.0 and row['norm_RNaseP']<= 1.0:
             return('Control_N_Cov')
         elif row['norm_N_Cov'] <= 3.0 and row['norm_RNaseP'] <=1.59:
             return('No_Call')
-        elif row['norm_N_Cov'] > 3.0 and row['norm_N_Cov'] <= 10.0 and row['norm_RNaseP'] <1.0:
+        elif row['norm_N_Cov'] > 3.0 and row['norm_N_Cov'] <= 9.0 and row['norm_RNaseP'] <1.0:
             return'CTRL_PLOD'
         else:
             return('missing')
     
     def void_detect_neg(row):
-        if row['norm_N_Cov'] > 10.0:
+        if row['norm_N_Cov'] > 9.0:
             return('Detected')
-        elif row['norm_N_Cov'] > 4.0 and row['norm_N_Cov'] <= 10.0:
+        elif row['norm_N_Cov'] > 4.0 and row['norm_N_Cov'] <= 9.0:
             return('PLOD')
         else:
             return('negative')
