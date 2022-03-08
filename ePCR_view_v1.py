@@ -9,7 +9,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import math
 
-version = 'v1.1 - alpha'
+version = 'v1.3 - alpha'
 
 def main():
     
