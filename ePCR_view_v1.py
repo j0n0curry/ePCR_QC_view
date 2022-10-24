@@ -254,7 +254,7 @@ if len(comp) > 0:
     comp['VIC_RFU'] = comp['VIC_RFU'].astype('float').abs()
     comp['ROX_RFU'] = comp['ROX_RFU'].astype('float').abs()
     #will remove this function - to the bottom - allow files to be processed and user defined and downloaed as whole set and analysed sets. 
-    comp.sort_values(['Run_ID', inplace = True)
+    comp.sort_values('Run_ID', inplace = True)
     #process file attributes in to parameters for QC. Essential information. 
     comp['Well'] = comp['Row_ID']+comp['Col_ID']
     comp['norm_RNaseP'] =  comp['VIC_RFU'].abs() / comp['ROX_RFU']
