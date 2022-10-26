@@ -368,7 +368,7 @@ def fam_pro_qc(comp):
         line=dict(color="red", dash = 'dash')
         ))
 
-    figN1.update_traces(marker_size=3)
+    figN1.update_traces(marker_size=6)
 
     figN1.add_trace(go.Scatter(
         y=[9, 9],
@@ -388,7 +388,7 @@ def fam_pro_qc(comp):
 
 def RP_pro_QC(comp):
     fig1bbnbb = px.scatter(comp, x= 'order', y = 'norm_RNaseP', color = 'Result', title = 'normalised RNaseP processing view' )
-    fig1bbnbb.update_traces(marker_size=3)
+    fig1bbnbb.update_traces(marker_size=6)
     fig1bbnbb.update_yaxes(range=[0, 6])
     fig1bbnbb.add_trace(go.Scatter(
         y=[1.5, 1.5],
@@ -446,7 +446,7 @@ def plot_roxCV(comp):
         textposition="top center",
         line=dict(color="Red", dash = 'dash')))
     fig3a.update_layout(title = 'ROX dispense processing ' + str(CT))
-    fig3a.update_traces(marker_size=3)
+    fig3a.update_traces(marker_size=6)
     fig3a.update_yaxes(range=[0, 6000])
     
     st.plotly_chart(fig3a, use_container_width=True)
@@ -456,7 +456,7 @@ def plot_roxCV(comp):
 #Display ROX vs FAM plot for over chemical performace vs dispense
 def roxfam(comp):
     figroxfam = px.scatter(comp, x= 'ROX_RFU', y = 'FAM_RFU' ,color = 'Result', title = 'N1 N2 detection Performance vs dispense')
-    figroxfam.update_traces(marker_size=3)
+    figroxfam.update_traces(marker_size=6)
     figroxfam.update_xaxes(range=[1000, 6000])
     figroxfam.update_yaxes(range=[0, 50000])
 
@@ -477,7 +477,7 @@ def cluster(comp):
     fig2b = px.scatter(comp, x= 'norm_RNaseP', y = 'norm_N_Cov',color = 'Result', title = 'Cluster Processing view')
     fig2b.update_xaxes(range=[-0.5, 4.5])
     fig2b.update_yaxes(range=[-0.5, 18])
-    fig2b.update_traces(marker_size=3)
+    fig2b.update_traces(marker_size=6)
     st.plotly_chart(fig2b, use_container_width=True)
 
 
@@ -489,7 +489,7 @@ def ctrl_view(testdf, m, l , u):
     
     figdt = px.scatter(testdf, x='date_time', y='norm_N_Cov', color = 'Result')
     figdt.update_yaxes(range=[0, 20])
-    figdt.update_traces(marker_size=3)
+    figdt.update_traces(marker_size=6)
     figdt.add_trace(go.Scatter(
         y=[m, m],
         x=[testdf.date_time.min(), testdf.date_time.max()],
@@ -526,7 +526,7 @@ def ctrl_sig(testdf, sig, m, l , u):
     
     figdt = px.scatter(testdf, x='date_time', y= sig, color = 'Result')
     figdt.update_yaxes(range=range)
-    figdt.update_traces(marker_size=3)
+    figdt.update_traces(marker_size=6)
     figdt.add_trace(go.Scatter(
         y=[m, m],
         x=[testdf.date_time.min(), testdf.date_time.max()],
