@@ -21,7 +21,7 @@ version = 'v3 - alpha'
 
 st.set_page_config(layout="wide")
 
-st.title('ePCR analysis tool ' +str(version))
+st.title('ePCR analysis tool ' +str(version) + ' for Araya RFL - 100 100 100 calibration')
 
 st.write('Developed by: jonathan.curry@lgcgroup.com - alpha version - for bugs, which are likely - please email files used for debugging purposes')
 
