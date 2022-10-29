@@ -312,12 +312,17 @@ def void_detect_neg(row):
         return('PLOD')
     else:
         return('negative')
-
+def logit(row):
+    if row['Detection'] == 'Detected':
+        return(1)
+    else:
+        return(0)    
      
 
 
 comp['Result'] = comp.apply(lambda row: scoring(row), axis = 1)   
 comp['Detection'] = comp.apply(lambda row: void_detect_neg(row), axis = 1) 
+comp['logit_r'] = comp.apply(lambda row: logit(row),axis = 1) 
 
 mem = comp.groupby(['Result'])['Result'].agg(['count']).reset_index()
 mem['Percentage'] = round(mem['count'] / e *100, 2)
