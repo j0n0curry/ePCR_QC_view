@@ -210,6 +210,13 @@ class ArayaManager(WellDataManager):
         #add in statement to deal with appended num in duplicated upload files.
         if len(self.date_time) > self.length:
             self.date_time = file_name[-(self.split_char_loc+50):-40]
+            
+            
+            
+
+def array_number_chars(x):
+    return(x[-10:])
+
     
 
 #Button to clear cache files and reselect - clearing all files
@@ -231,6 +238,7 @@ with st.form("upload", clear_on_submit=True):
 for uploaded_file in uploaded_files:
     if submitted and uploaded_file is not None: # stops the error of 'no files and start function if there are uploaed files
         file_names = (uploaded_file.name)# to add to Araya Manager.
+        file_names = sorted(files, key = array_number_chars)
         data_manager.get_run_name(file_names) # get the Run_ID. access ArayaManager function by passing file name
         data_manager.get_date_time(file_names)
         data_manager.concatenate_dataframes(uploaded_file) # concat dataframes.
@@ -259,8 +267,8 @@ if len(comp) > 0:
     comp['Well'] = comp['Row_ID']+comp['Col_ID']
     comp['norm_RNaseP'] =  comp['VIC_RFU'].abs() / comp['ROX_RFU']
     comp['norm_N_Cov'] =  comp["FAM_RFU"]  / comp['ROX_RFU']
-    comp.index.names=['order']
-    comp.reset_index(inplace = True)
+    #comp.index.names=['order']
+    #comp.reset_index(inplace = True)
     comp['date_time'] = pd.to_datetime(comp['date_time'], format='%Y%m%d%H%M%S')
     comp[['date', 'time']] = comp['date_time'].astype(str).str.split(' ', 1, expand=True)
     
