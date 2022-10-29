@@ -263,7 +263,7 @@ if len(comp) > 0:
     #process file attributes in to parameters for QC. Essential information. 
     comp['Well'] = comp['Row_ID']+comp['Col_ID']
     
-    comp.sort_values(['Well', 'Run_ID'], inplace = True)
+    comp.sort_values(['Run_ID','Well'], inplace = True)
     
     comp['norm_RNaseP'] =  comp['VIC_RFU'].abs() / comp['ROX_RFU']
     comp['norm_N_Cov'] =  comp["FAM_RFU"]  / comp['ROX_RFU']
