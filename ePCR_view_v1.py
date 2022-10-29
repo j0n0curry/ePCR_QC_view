@@ -238,7 +238,7 @@ with st.form("upload", clear_on_submit=True):
 for uploaded_file in uploaded_files:
     if submitted and uploaded_file is not None: # stops the error of 'no files and start function if there are uploaed files
         file_names = (uploaded_file.name)# to add to Araya Manager.
-        file_names = sorted(file_names, key = array_number_chars)
+       # file_names = sorted(file_names, key = array_number_chars)
         data_manager.get_run_name(file_names) # get the Run_ID. access ArayaManager function by passing file name
         data_manager.get_date_time(file_names)
         data_manager.concatenate_dataframes(uploaded_file) # concat dataframes.
